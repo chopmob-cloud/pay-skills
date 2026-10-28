@@ -1,8 +1,8 @@
 ---
 name: compliance-gate
 title: "AlgoVoi Compliance Gate"
-description: "Pre-payment compliance screen for autonomous agents. Returns a SAMLA-2018-tipping-off-compliant verdict (allow / block / flag) for a proposed recipient address against UK / EU / US / UN sanctions lists, AlgoVoi-tenant KYB status, and risk-tier classification — before the agent transmits funds. Pairs with a free /attestation endpoint exposing the gateway's full compliance posture."
-use_case: "Use before sending stablecoin payments to recipients you have not vetted. Particularly relevant for autonomous agents whose principals carry liability for payments to sanctioned entities, restricted jurisdictions, or high-risk counterparties — UK MLRs 2017, SAMLA 2018, OFAC SDN."
+description: "Pre-payment compliance screen for autonomous agents: an ALLOW, BLOCK or REFER verdict for a proposed recipient against OFSI, OFAC and EU sanctions plus KYB status, with a signed no-PII receipt."
+use_case: "Use before sending stablecoin to an unvetted recipient: sanctions screening, counterparty KYB status and risk-tier classification for agents whose principals carry MLR and OFAC liability."
 category: identity
 service_url: https://api.algovoi.co.uk
 openapi:
@@ -26,7 +26,7 @@ This is the productisation of [AlgoVoi's "compliance from day one" thesis](https
 Free, no-auth, no rate limit. Returns the gateway's full compliance posture as a verifiable transparency surface:
 
 - Frameworks asserted (UK MLRs 2017, SAMLA 2018 s.20, UK GDPR / DPA 2018, FCA PS19/22 self-assessment, ICO data-controller, SOC 2 targets)
-- Active sanctions sources (OFSI, OFAC, UN, EU)
+- Configured sanctions sources (OFSI, OFAC SDN, EU consolidated) and whether screening is currently enabled
 - URL / IP threat-intel feeds (Tor, SpamHaus DROP/EDROP, URLhaus, ThreatFox, OpenPhish, PhishTank, MaxMind GeoLite2)
 - Audit-chain head positions per chain + last shipment manifest
 - KYB classes + risk-tier definitions
@@ -115,7 +115,7 @@ The x402 payment headers (`X-PAYMENT` etc.) are included now so no config change
 
 ## What this is NOT
 
-- **Not a sanctions-list publisher.** We screen against canonical sources (OFSI, OFAC, UN, EU) on a 24h refresh cadence. We do not maintain our own sanctions list, and we do not expose the cache contents.
+- **Not a sanctions-list publisher.** We screen against canonical sources (OFSI, OFAC SDN, EU consolidated) on a 24h refresh cadence. We do not maintain our own sanctions list, and we do not expose the cache contents.
 - **Not a KYC service.** AlgoVoi's KYB tier is only knowable for AlgoVoi-onboarded merchant tenants. For non-tenant recipients, `recipient_kyb_status` returns `unknown`.
 - **Not a substitute for full transaction monitoring.** `/compliance/screen` is a pre-payment check. Post-payment monitoring, suspicious-activity reporting (SAR), and ongoing customer due diligence are separate workflows requiring AlgoVoi's full tenant-onboarded gateway path.
 

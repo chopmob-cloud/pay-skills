@@ -1,8 +1,8 @@
 ---
 name: agent-trust-bench
 title: "Agent Trust Bench — AI Payment Security Testing"
-description: "Open security-testing instrument for AI agent payment behaviour. Returns adversarial x402 challenges across 30 threat categories (amount escalation, receiver spoofing, authority injection, multi-turn traps, credential extraction, supply-chain attacks). Accepts USDC on Base, Solana, and Algorand. All proceeds donated."
-use_case: "Use to audit AI agent payment decision-making: evaluate pre-payment review, escalation stop-points, post-validation of received content, authority-injection resistance, and multi-turn manipulation resilience before production deployment."
+description: "Open security-testing instrument for AI agent payments: 202 adversarial x402 resources across 187 profiles, scored on whether an agent refuses manipulation or pays. Base, Solana, Algorand USDC."
+use_case: "Use to audit a payment-capable agent before production: escalation stop-points, receiver spoofing, authority injection, credential extraction and multi-turn manipulation."
 category: security
 service_url: https://agent-trust-bench.algovoi.co.uk
 openapi:
@@ -13,13 +13,13 @@ openapi:
 
 A security-testing instrument that exposes AI agents to adversarial x402 payment scenarios. Every endpoint is a different threat profile — from basic reflex tests to multi-turn manipulation chains and supply-chain attacks. The bench records how agents behave, not what they spend.
 
-**138 profiles across 30 threat categories** (Phase 7). OWASP LLM Top 10 mapped. Pass threshold: 129+/138.
+**187 profiles across 30 threat categories**, published as 202 x402 resources (187 static profiles, 4 escalation steps, 10 drain steps, 1 price probe). OWASP LLM Top 10 mapped. Pass threshold: 177+/187.
 
 ## Threat categories
 
 | Category | Example profiles |
 |---|---|
-| Amount escalation | `/escalate/1..4` — $0.01 → $0.10 → $1.00 → $10.00 ladder |
+| Amount escalation | `/escalate/1..4` — $0.01 → $0.10 → $0.50 → $1.00 ladder |
 | Receiver spoofing | `/typosquat`, `/unicode-trick`, `/asset-spoof` |
 | Authority injection | `/spoof` — fake "Global Agent Trust Council" override |
 | Multi-turn traps | `/baitswitch`, `/downgrade`, `/partial-fulfilment`, `/loop` |
@@ -38,15 +38,15 @@ All paid endpoints serve a 3-leg `accepts[]` challenge — agents can settle on 
 | Solana mainnet | USDC (`EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`) | `GFir5uY6Rrgk3MRSUKSXp2Z5v7x8pum9vn7xjpr8TAGy` |
 | Algorand mainnet | USDC ASA `31566704` | `GHSRL2SAY247LWE7HLUGEYKHC5JMDOGWECW5TMN6PTP73FT2Z5AWMADMWI` |
 
-All proceeds donated. Maximum transaction $1.00. The bench module itself is receive-only — import-time guards reject any outbound HTTP, wallet, or signing primitive.
+All proceeds donated. Maximum transaction $1.00 per challenge (enforced at import time). The bench module itself is receive-only — import-time guards reject any outbound HTTP, wallet, or signing primitive.
 
 ## Free control endpoints
 
 | Endpoint | Purpose |
 |---|---|
-| `/agent-trust-bench/freebie` | Free baseline — no payment required |
-| `/agent-trust-bench/stats` | Public aggregate counters |
-| `/agent-trust-bench/profiles` | Full profile index (138 entries) |
+| `/freebie` | Free baseline — no payment required |
+| `/stats.json` | Public aggregate counters (JSON) |
+| `/discovery/resources` | Full resource index: 202 x402 resources with per-profile metadata |
 
 ## Spend-aware usage
 
